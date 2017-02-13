@@ -1,18 +1,20 @@
 #include "Core/Application.h"
 #include "UI/Console.h"
-#include "Communication/TcpSocket.h"
 #include "Logging/TcpLogger.h"
+#include "Networking/Tcp/Socket.h"
 
 void Run(Core::Application* app)
 {
-    Communication::TcpSocket socket;
-    Logging::TcpLogger logger(&socket);
+  Networking::Host host;
+  host.name = "127.0.0.1";
+  host.port = 2000;
+  Networking::Tcp::Socket socket(host);
 
-    socket.Listen("0.0.0.0", 2000);
+  socket.Send("Hallo!");
 
-    // TODO - draw menu and wait for input
-    UI::Console::Write("What to read, what to read: ");
-    UI::Console::WriteLine(UI::Console::Read());
+  // TODO - draw menu and wait for input
+  UI::Console::Write("Press any key to exit");
+  UI::Console::WriteLine(UI::Console::Read());
 }
 
 int main(int argc, char* argv[])
