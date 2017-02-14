@@ -6,15 +6,33 @@ set(CMAKE_BUILD_TYPE Release)
 
 project(${project_name})
 
-ExternalProject_Add(cpp98posix-framework
-  URL https://github.com/Chris-Kruining/cpp98posix-framework/archive/0.0.2.tar.gz
-  PREFIX ${CMAKE_CURRENT_BINARY_DIR}/cpp98posix-framework-0.0.2
-  CONFIGURE_COMMAND ""
-  BUILD_COMMAND make
-  INSTALL_COMMAND make install PREFIX=${CMAKE_CURRENT_BINARY_DIR}/cpp98posix-framework-0.0.2
+include(ExternalProject)
+
+ExternalProject_Add(
+  Framework
+
+  GIT_REPOSITORY "https://github.com/Chris-Kruining/cpp98posix-framework.git"
+  GIT_TAG "develop"
+
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+
+  SOURCE_DIR "${CMAKE_SOURCE_DIR}/lib/cpp98posix-framework"
+  CMAKE_ARGS -DBuildShared=ON -DCMAKE_INSTALL_PREFIX=${GLOBAL_OUTPUT_PATH}/cpp98posix-framework
+
+  TEST_COMMAND ""
 )
 
-ExternalProject_Get_Property(cpp98posix-framework install_dir)
+ExternalProject_Add_Step(
+  Framework CopyToBin
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${GLOBAL_OUTPUT_PATH}/cpp98posix-framework/bin ${GLOBAL_OUTPUT_PATH}
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${GLOBAL_OUTPUT_PATH}/cpp98posix-framework/lib ${GLOBAL_OUTPUT_PATH}
+  DEPENDEES install
+)
+
+set(Framework_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/lib/cpp98posix-framework/src")
+set(Framework_LIBRARIES "${CMAKE_SHARED_LIBRARY_PREFIX}cpp98posix-framework${CMAKE_SHARED_LIBRARY_SUFFIX}")
+include_directories(${Framework_INCLUDE_DIRS})
 
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -27,7 +45,7 @@ include_directories(src)
 
 add_executable(${project_name} src/main.cpp ${src})
 
-target_link_libraries(${project_name} ${project_name_lib} pthread)
+target_link_libraries(${project_name} pthread)
 
 include_directories(lib/catch)
 
