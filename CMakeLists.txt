@@ -6,7 +6,16 @@ set(CMAKE_BUILD_TYPE Release)
 
 project(${project_name})
 
-#include(${CMAKE_CURRENT_SOURCE_DIR}/../cpp98posix-framework/CMakeLists.txt)
+ExternalProject_Add(cpp98posix-framework
+  URL https://github.com/Chris-Kruining/cpp98posix-framework/archive/0.0.2.tar.gz
+  PREFIX ${CMAKE_CURRENT_BINARY_DIR}/cpp98posix-framework-0.0.2
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND make
+  INSTALL_COMMAND make install PREFIX=${CMAKE_CURRENT_BINARY_DIR}/cpp98posix-framework-0.0.2
+)
+
+ExternalProject_Get_Property(cpp98posix-framework install_dir)
+
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_definitions(-std=c++98 -stdlib=libc++ -O3 -Wall)
