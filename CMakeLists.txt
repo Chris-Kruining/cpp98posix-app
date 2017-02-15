@@ -35,9 +35,11 @@ endif()
 
 include_directories(src)
 
-add_executable(${project_name} src/main.cpp ${src})
+add_executable(Client src/client.cpp ${src})
+target_link_libraries(Client ${Framework_LIBRARIES} pthread)
 
-target_link_libraries(${project_name} ${Framework_LIBRARIES} pthread)
+add_executable(Server src/server.cpp ${src})
+target_link_libraries(Server ${Framework_LIBRARIES} pthread)
 
 include_directories(lib/catch)
 
