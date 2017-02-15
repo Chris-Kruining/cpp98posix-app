@@ -23,7 +23,7 @@ before_install:
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DBuildTests=ON
   - make
   - ctest
 
