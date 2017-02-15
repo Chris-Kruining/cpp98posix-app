@@ -23,6 +23,8 @@ ExternalProject_Add(
   TEST_COMMAND ""
 )
 
+set(Framework_INCLUDE_DIRS "../lib/cpp98posix/include")
+set(Framework_LIBRARIES "${CMAKE_SHARED_LIBRARY_PREFIX}cpp98posix${CMAKE_SHARED_LIBRARY_SUFFIX}")
 include_directories(${CMAKE_SOURCE_DIR}/lib/cpp98posix-framework/src)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -35,7 +37,7 @@ include_directories(src)
 
 add_executable(${project_name} src/main.cpp ${src})
 
-target_link_libraries(${project_name} pthread)
+target_link_libraries(${project_name} ${Framework_LIBRARIES} pthread)
 
 include_directories(lib/catch)
 
