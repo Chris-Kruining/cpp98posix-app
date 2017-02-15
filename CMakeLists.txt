@@ -18,22 +18,12 @@ ExternalProject_Add(
   PATCH_COMMAND ""
 
   SOURCE_DIR "${CMAKE_SOURCE_DIR}/lib/cpp98posix-framework"
-  CMAKE_ARGS -DBuildShared=ON -DCMAKE_INSTALL_PREFIX=${GLOBAL_OUTPUT_PATH}/cpp98posix-framework
+  CMAKE_ARGS -DBuildShared=ON
 
   TEST_COMMAND ""
 )
 
-ExternalProject_Add_Step(
-  Framework CopyToBin
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${GLOBAL_OUTPUT_PATH}/cpp98posix-framework/bin ${GLOBAL_OUTPUT_PATH}
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${GLOBAL_OUTPUT_PATH}/cpp98posix-framework/lib ${GLOBAL_OUTPUT_PATH}
-  DEPENDEES install
-)
-
-set(Framework_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/lib/cpp98posix-framework/src")
-set(Framework_LIBRARIES "${CMAKE_SHARED_LIBRARY_PREFIX}cpp98posix-framework${CMAKE_SHARED_LIBRARY_SUFFIX}")
-include_directories(${Framework_INCLUDE_DIRS})
-
+include_directories(${CMAKE_SOURCE_DIR}/lib/cpp98posix-framework/src)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_definitions(-std=c++98 -stdlib=libc++ -O3 -Wall)
