@@ -1,6 +1,3 @@
-#include <unistd.h>
-#include <string>
-
 #include "Core/Application.h"
 #include "UI/Console.h"
 #include "Networking/Tcp/Listener.h"
@@ -11,7 +8,7 @@ void Run(Core::Application* app)
   Networking::Host host;
   host.name = "";
   host.port = 2000;
-  Networking::Tcp::Listener listener(host);  
+  Networking::Tcp::Listener listener(host);
 
   // TODO - draw menu and wait for input
   UI::Console::Write("Press any key to exit");
